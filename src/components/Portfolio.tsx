@@ -92,6 +92,17 @@ const Portfolio: React.FC = () => {
             </motion.div>
           ))}
         </div>
+        <div className="mt-12 flex justify-center">
+          <Link
+            to="/portfolio"
+            className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-300 ease-out bg-gradient-to-r from-violet-600 to-violet-800 rounded-2xl shadow-lg hover:shadow-violet-500/25 hover:scale-105"
+          >
+            <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-violet-600 to-violet-800 rounded-2xl blur-md group-hover:blur-xl transition-all duration-300"></span>
+            <span className="relative flex items-center gap-2">
+              {language === 'pl' ? 'Zobacz wszystkie projekty' : 'See all projects'}
+            </span>
+          </Link>
+        </div>
       </div>
     </motion.section>
   );
