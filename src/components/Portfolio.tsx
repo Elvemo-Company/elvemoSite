@@ -39,12 +39,18 @@ const Portfolio: React.FC = () => {
   const nextSlide = () => {
     if (currentSlide < filteredProjects.length - 1) {
       scrollToSlide(currentSlide + 1);
+    } else {
+      // Loop to first slide
+      scrollToSlide(0);
     }
   };
 
   const prevSlide = () => {
     if (currentSlide > 0) {
       scrollToSlide(currentSlide - 1);
+    } else {
+      // Loop to last slide
+      scrollToSlide(filteredProjects.length - 1);
     }
   };
 
@@ -146,8 +152,7 @@ const Portfolio: React.FC = () => {
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
-            disabled={currentSlide === 0}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800/80 transition-all duration-300"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-gray-800/80 transition-all duration-300"
             style={{ minHeight: '44px', minWidth: '44px' }}
           >
             <ChevronLeft className="w-5 h-5" />
@@ -155,8 +160,7 @@ const Portfolio: React.FC = () => {
           
           <button
             onClick={nextSlide}
-            disabled={currentSlide === filteredProjects.length - 1}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800/80 transition-all duration-300"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-gray-800/80 transition-all duration-300"
             style={{ minHeight: '44px', minWidth: '44px' }}
           >
             <ChevronRight className="w-5 h-5" />
@@ -196,7 +200,7 @@ const Portfolio: React.FC = () => {
                     <h3 className="text-lg md:text-xl font-bold text-white mb-2">
                       {project.title}
                     </h3>
-                    <p className="text-gray-300 mb-4 text-sm">
+                    <p className="text-gray-300 mb-4 text-sm hidden md:block">
                       {project.description}
                     </p>
                     <Link
@@ -213,17 +217,16 @@ const Portfolio: React.FC = () => {
           </div>
 
           {/* Scroll Indicators */}
-          <div className="flex justify-center gap-2 mt-4">
+          <div className="flex justify-center items-center gap-2 mt-4">
             {filteredProjects.map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`transition-all duration-300 rounded-full ${
                   index === currentSlide
-                    ? 'bg-violet-400 w-6'
-                    : 'bg-gray-600 hover:bg-gray-500'
+                    ? 'w-5 h-2 bg-violet-400'
+                    : 'w-2 h-2 bg-gray-600 hover:bg-gray-500'
                 }`}
-                style={{ minHeight: '44px', minWidth: '44px' }}
               />
             ))}
           </div>

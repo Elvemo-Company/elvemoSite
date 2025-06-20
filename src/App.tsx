@@ -1,5 +1,5 @@
-import React from 'react';
-import { LanguageProvider } from './contexts/LanguageContext';
+import React, { useEffect } from 'react';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -35,8 +35,15 @@ const HashHandler: React.FC = () => {
 
 // Główny komponent aplikacji
 const AppContent: React.FC = () => {
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    // Ustawia język w atrybucie HTML dla globalnych stylów
+    document.documentElement.lang = language;
+  }, [language]);
+
   return (
-    <div className="relative min-h-screen bg-black text-white">
+    <div className="relative min-h-screen bg-black text-white font-lexend">
       {/* Single global particle background with cursor effect */}
       <ParticleBackground density="high" fadeDirection="down" />
       

@@ -859,7 +859,7 @@ const Contact: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="space-y-8"
+            className="hidden md:block space-y-8"
           >
             <div className="bg-black/30 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-8">
               <h3 className="text-xl font-semibold text-white mb-4">

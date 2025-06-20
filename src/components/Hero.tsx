@@ -29,7 +29,7 @@ const Hero: React.FC = () => {
       
       <div className="relative z-20 h-full flex flex-col justify-center px-6 md:px-16 max-w-7xl mx-auto">
         <div className="space-y-6 md:space-y-8 max-w-3xl">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight font-space-mono">
             <span className="block animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
               {t.hero.headline1}
             </span>
