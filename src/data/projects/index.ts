@@ -19,7 +19,8 @@ export const getPortfolioProjects = (language: 'en' | 'pl') => {
     title: project.translations[language].title,
     description: project.translations[language].description,
     category: project.translations[language].category,
-    image: project.portfolio.image
+    image: project.portfolio.image,
+    year: project.projectPage.year // Dodane pole year
   }));
 };
 

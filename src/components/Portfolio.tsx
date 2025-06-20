@@ -79,7 +79,7 @@ const Portfolio: React.FC = () => {
                 <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
                   {project.title}
                 </h3>
-                <p className="text-gray-300 mb-6 opacity-0 transform translate-y-10 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                <p className="hidden md:block text-gray-300 mb-6 opacity-0 transform translate-y-10 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
                   {project.description}
                 </p>
                 <Link

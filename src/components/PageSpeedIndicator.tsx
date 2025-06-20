@@ -194,7 +194,7 @@ const PageSpeedIndicator: React.FC<PageSpeedIndicatorProps> = ({ scores, reportU
                         {translatedScore.score}
                       </motion.text>
                     </svg>
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-60">
                       <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-4 bg-gray-900/95 backdrop-blur-xl rounded-xl text-sm text-gray-300 w-48 text-center shadow-xl border border-gray-700/30">
                         {translatedScore.description}
                         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">

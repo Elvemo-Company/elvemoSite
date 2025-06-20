@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Portfolio from './components/Portfolio';
+import PortfolioAll from './components/PortfolioAll';
 import Services from './components/Services';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -55,6 +56,7 @@ const AppContent: React.FC = () => {
               <Contact />
             </main>
           } />
+          <Route path="/portfolio" element={<PortfolioAll />} />
           <Route path="/portfolio/:id" element={<ProjectPage />} />
           <Route path="/legal" element={<LegalDocuments />} />
           <Route path="/sitemap" element={<UserSitemap />} />

@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-violet-950 border-t border-violet-800/50">
+    <footer className="bg-violet-950 border-t border-violet-800/50 relative z-20">
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Logo and description */}

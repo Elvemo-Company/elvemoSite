@@ -40,8 +40,11 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
 
     // Determine particle count based on density
     const getParticleCount = () => {
-      const baseCount = Math.min(125, Math.floor((canvas.width * canvas.height) / 12000));
-      
+      let baseCount = Math.min(125, Math.floor((canvas.width * canvas.height) / 12000));
+      // Zmniejsz ilość cząsteczek na mobile
+      if (window.innerWidth < 768) {
+        baseCount = Math.floor(baseCount / 1.7);
+      }
       switch(density) {
         case 'high': return baseCount * 1.5;
         case 'low': return baseCount * 0.6;
@@ -59,15 +62,17 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
       speedY: number;
       color: string;
       initialY: number;
+      canvas: HTMLCanvasElement;
 
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
+      constructor(canvas: HTMLCanvasElement) {
+        this.canvas = canvas;
+        this.x = Math.random() * this.canvas.width;
+        this.y = Math.random() * this.canvas.height;
         this.initialY = this.y; // Store initial Y position for fade effect
         
         // Larger particles, especially at the top
         const positionFactor = fadeDirection === 'down' 
-          ? Math.max(0.5, 1 - (this.y / canvas.height)) 
+          ? Math.max(0.5, 1 - (this.y / this.canvas.height)) 
           : 1;
           
         this.baseSize = (Math.random() * 4 + 1) * positionFactor;
@@ -85,10 +90,10 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
         this.x += this.speedX;
         this.y += this.speedY;
 
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
+        if (this.x > this.canvas.width) this.x = 0;
+        if (this.x < 0) this.x = this.canvas.width;
+        if (this.y > this.canvas.height) this.y = 0;
+        if (this.y < 0) this.y = this.canvas.height;
         
         // Interact with cursor
         const dx = this.x - cursorRef.current.x;
@@ -116,7 +121,7 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
     const particleCount = getParticleCount();
     
     for (let i = 0; i < particleCount; i++) {
-      particleArray.push(new Particle());
+      particleArray.push(new Particle(canvas));
     }
 
     // Animation loop
