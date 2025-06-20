@@ -1,14 +1,15 @@
-import React from 'react';
-import { Code, Paintbrush, BarChart, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Code, Paintbrush, BarChart, ChevronRight, ChevronDown, Plus, Minus } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Services: React.FC = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
+  const [expandedService, setExpandedService] = useState<number>(0); // First service expanded by default
 
   const handleContactClick = () => {
     navigate('/#contact');
@@ -18,6 +19,10 @@ const Services: React.FC = () => {
         contactSection.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
+  };
+
+  const toggleService = (index: number) => {
+    setExpandedService(expandedService === index ? -1 : index);
   };
 
   const services = [
@@ -57,7 +62,8 @@ const Services: React.FC = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Desktop Grid Layout */}
+        <div className="hidden md:grid md:grid-cols-3 gap-10">
           {services.map((service, index) => (
             <div
               key={index}
@@ -79,6 +85,79 @@ const Services: React.FC = () => {
                 ))}
               </ul>
             </div>
+          ))}
+        </div>
+
+        {/* Mobile Accordion Layout */}
+        <div className="md:hidden space-y-4">
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className={`bg-black/30 backdrop-blur-sm border rounded-2xl transition-all duration-300 ${
+                expandedService === index
+                  ? 'border-violet-500/30 shadow-lg shadow-violet-900/20'
+                  : 'border-gray-800/50'
+              }`}
+            >
+              {/* Accordion Header */}
+              <button
+                onClick={() => toggleService(index)}
+                className="w-full p-6 flex items-center justify-between text-left focus:outline-none"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`p-3 rounded-xl transition-colors duration-300 ${
+                    expandedService === index
+                      ? 'bg-violet-900/20'
+                      : 'bg-gray-800/20'
+                  }`}>
+                    {service.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-white">{service.title}</h3>
+                </div>
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800/50 transition-all duration-300">
+                  {expandedService === index ? (
+                    <Minus className="w-5 h-5 text-violet-400" />
+                  ) : (
+                    <Plus className="w-5 h-5 text-gray-400" />
+                  )}
+                </div>
+              </button>
+
+              {/* Accordion Content */}
+              <AnimatePresence>
+                {expandedService === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6">
+                      <p className="text-gray-400 mb-6">{service.description}</p>
+                      
+                      <ul className="space-y-3">
+                        {service.features.map((feature, idx) => (
+                          <motion.li
+                            key={idx}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3, delay: idx * 0.1 }}
+                            className="flex items-start"
+                          >
+                            <span className="mr-3 mt-1 w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+                            <span className="text-gray-300">{feature}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
         </div>
         

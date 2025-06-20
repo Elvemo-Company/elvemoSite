@@ -56,25 +56,25 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-violet-950 border-t border-violet-800/50 relative z-20">
-      <div className="max-w-7xl mx-auto px-6 md:px-16 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-6 md:px-16 py-8 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-10">
           {/* Logo and description */}
           <div className="md:col-span-2">
-            <div className="flex items-center mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-xl mr-3">
+            <div className="flex items-center mb-4 md:mb-6">
+              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-lg md:text-xl mr-3">
                 E
               </div>
-              <span className="text-white text-xl font-bold">elvemo</span>
+              <span className="text-white text-lg md:text-xl font-bold">elvemo</span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-md">
+            <p className="text-gray-400 mb-4 md:mb-6 max-w-md text-sm md:text-base">
               {t.footer.description.replace(/Vibbly/gi, 'elvemo')}
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 md:space-x-4">
               {socialLinks.map((link, index) => (
                 <a
                   key={index}
                   href={link.href}
-                  className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-violet-600 hover:text-white transition-all duration-300"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-violet-600 hover:text-white transition-all duration-300"
                 >
                   {link.icon}
                 </a>
@@ -83,12 +83,12 @@ const Footer: React.FC = () => {
           </div>
           {/* Quick links & Legal - MOBILE: 2 columns obok siebie */}
           <div className="block md:hidden col-span-1">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4">
               {/* Quick links */}
-              <div className="space-y-4">
-                <h3 className="text-white font-semibold mb-4">{t.footer.quickLinks.title}</h3>
-                <ul className="space-y-2">
-                  {quickLinks.map((link, index) => (
+              <div className="space-y-2">
+                <h3 className="text-white font-semibold mb-2 text-sm">{t.footer.quickLinks.title}</h3>
+                <ul className="space-y-1">
+                  {quickLinks.slice(0, 4).map((link, index) => (
                     <li key={index}>
                       <a
                         href={link.href}
@@ -98,10 +98,10 @@ const Footer: React.FC = () => {
                             handleScrollToSection(link.href.substring(2));
                           }
                         }}
-                        className="text-gray-400 hover:text-violet-400 transition-colors duration-300 group flex items-center"
+                        className="text-gray-400 hover:text-violet-400 transition-colors duration-300 group flex items-center text-xs"
                       >
                         <span>{link.name}</span>
-                        <ChevronRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
+                        <ChevronRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
                       </a>
                     </li>
                   ))}
@@ -109,16 +109,16 @@ const Footer: React.FC = () => {
               </div>
               {/* Legal */}
               <div>
-                <h4 className="text-white font-semibold mb-6">{t.footer.legal.title}</h4>
-                <ul className="space-y-3">
+                <h4 className="text-white font-semibold mb-2 text-sm">{t.footer.legal.title}</h4>
+                <ul className="space-y-1">
                   {legalLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-gray-400 hover:text-violet-400 transition-colors duration-300 group flex items-center"
+                        className="text-gray-400 hover:text-violet-400 transition-colors duration-300 group flex items-center text-xs"
                       >
                         <span>{link.label}</span>
-                        <ChevronRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
+                        <ChevronRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
                       </Link>
                     </li>
                   ))}
@@ -168,24 +168,24 @@ const Footer: React.FC = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-500 text-sm mb-4 md:mb-0">
+        <div className="border-t border-gray-800 mt-8 md:mt-16 pt-4 md:pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-500 text-xs md:text-sm mb-2 md:mb-0">
             © {currentYear} elvemo. {t.footer.rights.replace(/Vibbly/gi, 'elvemo')}
           </p>
-          <div className="flex space-x-6">
+          <div className="flex space-x-4 md:space-x-6">
             <Link 
               to="/legal#terms" 
-              className="text-gray-500 hover:text-violet-400 text-sm transition-colors duration-300 group flex items-center"
+              className="text-gray-500 hover:text-violet-400 text-xs md:text-sm transition-colors duration-300 group flex items-center"
             >
               <span>{t.footer.terms}</span>
-              <ChevronRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
+              <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
             </Link>
             <Link 
               to="/legal#privacy" 
-              className="text-gray-500 hover:text-violet-400 text-sm transition-colors duration-300 group flex items-center"
+              className="text-gray-500 hover:text-violet-400 text-xs md:text-sm transition-colors duration-300 group flex items-center"
             >
               <span>{t.footer.privacy}</span>
-              <ChevronRight className="w-4 h-4 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
+              <ChevronRight className="w-3 h-3 md:w-4 md:h-4 ml-1 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />
             </Link>
           </div>
         </div>

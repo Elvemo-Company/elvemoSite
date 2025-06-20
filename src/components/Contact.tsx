@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Send, Calendar, CheckCircle, AlertCircle, Loader2, Phone, Mail, MapPin, ChevronDown, ChevronRight, Copy, Check } from 'lucide-react';
+import { Send, Calendar, CheckCircle, AlertCircle, Loader2, Phone, Mail, MapPin, ChevronDown, ChevronRight, Copy, Check, ChevronUp } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -54,6 +54,7 @@ const Contact: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [isCopied, setIsCopied] = useState(false);
+  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -253,13 +254,13 @@ const Contact: React.FC = () => {
         </div>
         
         <div className="grid md:grid-cols-2 gap-10 items-start">
-          {/* Contact form */}
+          {/* Desktop Contact Form */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="bg-black/30 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-8"
+            className="hidden md:block bg-black/30 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-8"
           >
             <AnimatePresence mode="wait">
               {submitStatus === 'success' ? (
@@ -493,6 +494,364 @@ const Contact: React.FC = () => {
               )}
             </AnimatePresence>
           </motion.div>
+
+          {/* Mobile Contact Layout - Phone First, Form Second */}
+          <div className="md:hidden space-y-6">
+            {/* Mobile Phone Section - Prominent */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="bg-gradient-to-br from-violet-600/20 to-fuchsia-600/20 backdrop-blur-sm border border-violet-500/30 rounded-2xl p-6"
+            >
+              <div className="text-center mb-6">
+                <div className="mb-4 p-3 rounded-full bg-violet-600/30 w-fit mx-auto">
+                  <Phone className="w-8 h-8 text-violet-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  {language === 'pl' ? 'Zadzwoń teraz' : 'Call Now'}
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  {language === 'pl' 
+                    ? 'Bezpłatna konsultacja w ciągu 5 minut' 
+                    : 'Free consultation within 5 minutes'}
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <motion.a
+                  href="tel:+48123456789"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white py-4 px-6 rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
+                  style={{ minHeight: '56px' }}
+                >
+                  <Phone className="w-6 h-6" />
+                  <span>+48 123 456 789</span>
+                </motion.a>
+                
+                <div className="flex items-center justify-center gap-4">
+                  <motion.button
+                    onClick={handleCopyNumber}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 rounded-lg text-gray-300 hover:bg-gray-700/50 transition-colors duration-300"
+                  >
+                    {isCopied ? (
+                      <Check className="w-4 h-4 text-green-400" />
+                    ) : (
+                      <Copy className="w-4 h-4" />
+                    )}
+                    <span className="text-sm">
+                      {isCopied 
+                        ? (language === 'pl' ? 'Skopiowano!' : 'Copied!') 
+                        : (language === 'pl' ? 'Kopiuj' : 'Copy')
+                      }
+                    </span>
+                  </motion.button>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-3 bg-black/20 rounded-lg">
+                <p className="text-xs text-gray-400 text-center">
+                  {language === 'pl'
+                    ? 'Dostępni pon-pt 9:00-17:00 • Pierwsza konsultacja gratis'
+                    : 'Available Mon-Fri 9:00-17:00 • First consultation free'}
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Mobile Contact Form */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="bg-black/30 backdrop-blur-sm border border-gray-800/50 rounded-2xl p-6"
+            >
+              <div className="text-center mb-6">
+                <h3 className="text-lg font-bold text-white mb-2">
+                  {language === 'pl' ? 'Wyślij wiadomość' : 'Send Message'}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {language === 'pl' 
+                    ? 'Lub wypełnij formularz poniżej' 
+                    : 'Or fill out the form below'}
+                </p>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {submitStatus === 'success' ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="h-full flex flex-col items-center justify-center text-center py-10"
+                  >
+                    <div className="mb-6 p-3 rounded-full bg-green-500/20 text-green-400">
+                      <CheckCircle className="w-10 h-10" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-3">{t.contact.success.title}</h3>
+                    <p className="text-gray-400">{t.contact.success.message}</p>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleSubmit}
+                    className="space-y-6"
+                  >
+                    {/* Essential Fields */}
+                    <div className="space-y-4">
+                      <div>
+                        <label htmlFor="mobile-name" className="block text-sm font-medium text-gray-400 mb-2">
+                          {t.contact.form.name} *
+                        </label>
+                        <input
+                          type="text"
+                          id="mobile-name"
+                          name="name"
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          className={`w-full px-4 py-4 bg-gray-900/30 border ${
+                            errors.name ? 'border-red-500/50' : 'border-gray-800/50'
+                          } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors duration-300 text-base`}
+                          placeholder={t.contact.form.namePlaceholder}
+                          style={{ minHeight: '50px' }}
+                        />
+                        {errors.name && (
+                          <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.name}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label htmlFor="mobile-email" className="block text-sm font-medium text-gray-400 mb-2">
+                          {t.contact.form.email} *
+                        </label>
+                        <input
+                          type="email"
+                          id="mobile-email"
+                          name="email"
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                          autoComplete="email"
+                          className={`w-full px-4 py-4 bg-gray-900/30 border ${
+                            errors.email ? 'border-red-500/50' : 'border-gray-800/50'
+                          } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors duration-300 text-base`}
+                          placeholder={t.contact.form.emailPlaceholder}
+                          style={{ minHeight: '50px' }}
+                        />
+                        {errors.email && (
+                          <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.email}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label htmlFor="mobile-message" className="block text-sm font-medium text-gray-400 mb-2">
+                          {t.contact.form.message} *
+                        </label>
+                        <textarea
+                          id="mobile-message"
+                          name="message"
+                          rows={4}
+                          required
+                          value={formData.message}
+                          onChange={handleChange}
+                          maxLength={1000}
+                          className={`w-full px-4 py-4 bg-gray-900/30 border ${
+                            errors.message ? 'border-red-500/50' : 'border-gray-800/50'
+                          } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors duration-300 text-base`}
+                          placeholder={t.contact.form.messagePlaceholder}
+                          style={{ minHeight: '120px' }}
+                        ></textarea>
+                        {errors.message && (
+                          <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Additional Fields Toggle */}
+                    <button
+                      type="button"
+                      onClick={() => setShowAdditionalFields(!showAdditionalFields)}
+                      className="w-full flex items-center justify-between p-4 bg-gray-800/20 rounded-lg hover:bg-gray-800/30 transition-colors duration-300"
+                    >
+                      <span className="text-gray-300 font-medium">
+                        {language === 'pl' ? 'Więcej opcji' : 'More options'}
+                      </span>
+                      {showAdditionalFields ? (
+                        <ChevronUp className="w-5 h-5 text-violet-400" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                      )}
+                    </button>
+
+                    {/* Additional Fields */}
+                    <AnimatePresence>
+                      {showAdditionalFields && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: 'easeInOut' }}
+                          className="overflow-hidden space-y-4"
+                        >
+                          <div>
+                            <label htmlFor="mobile-phone" className="block text-sm font-medium text-gray-400 mb-2">
+                              {t.contact.form.phone}
+                            </label>
+                            <input
+                              type="tel"
+                              id="mobile-phone"
+                              name="phone"
+                              value={formData.phone}
+                              onChange={handleChange}
+                              autoComplete="tel"
+                              className={`w-full px-4 py-4 bg-gray-900/30 border ${
+                                errors.phone ? 'border-red-500/50' : 'border-gray-800/50'
+                              } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors duration-300 text-base`}
+                              placeholder={t.contact.form.phonePlaceholder}
+                              style={{ minHeight: '50px' }}
+                            />
+                            {errors.phone && (
+                              <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+                                <AlertCircle className="w-4 h-4" />
+                                {errors.phone}
+                              </p>
+                            )}
+                          </div>
+
+                          <div>
+                            <label htmlFor="mobile-company" className="block text-sm font-medium text-gray-400 mb-2">
+                              {t.contact.form.company}
+                            </label>
+                            <input
+                              type="text"
+                              id="mobile-company"
+                              name="company"
+                              value={formData.company}
+                              onChange={handleChange}
+                              className="w-full px-4 py-4 bg-gray-900/30 border border-gray-800/50 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/50 transition-colors duration-300 text-base"
+                              placeholder={t.contact.form.companyPlaceholder}
+                              style={{ minHeight: '50px' }}
+                            />
+                          </div>
+
+                          <div>
+                            <label htmlFor="mobile-subject" className="block text-sm font-medium text-gray-400 mb-2">
+                              {t.contact.form.subject}
+                            </label>
+                            <CustomSelect
+                              id="mobile-subject"
+                              name="subject"
+                              value={formData.subject}
+                              onChange={handleChange}
+                              placeholder={t.contact.form.subjectPlaceholder}
+                              options={[
+                                { value: 'website', label: { pl: 'Strona internetowa', en: 'Website' } },
+                                { value: 'ecommerce', label: { pl: 'Sklep internetowy', en: 'E-commerce' } },
+                                { value: 'app', label: { pl: 'Aplikacja webowa', en: 'Web application' } },
+                                { value: 'other', label: { pl: 'Inne', en: 'Other' } }
+                              ]}
+                              className="py-4"
+                            />
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-4">
+                            <div>
+                              <label htmlFor="mobile-budget" className="block text-sm font-medium text-gray-400 mb-2">
+                                {t.contact.form.budget}
+                              </label>
+                              <CustomSelect
+                                id="mobile-budget"
+                                name="budget"
+                                value={formData.budget}
+                                onChange={handleChange}
+                                placeholder={t.contact.form.budgetPlaceholder}
+                                options={[
+                                  { value: 'small', label: { pl: 'Do 5 000 PLN', en: 'Up to 1 000 EUR' } },
+                                  { value: 'medium', label: { pl: '5 000 - 15 000 PLN', en: '1 000 - 3 000 EUR' } },
+                                  { value: 'large', label: { pl: '15 000 - 30 000 PLN', en: '3 000 - 6 000 EUR' } },
+                                  { value: 'enterprise', label: { pl: 'Powyżej 30 000 PLN', en: 'Above 6 000 EUR' } }
+                                ]}
+                                className="py-4"
+                              />
+                            </div>
+
+                            <div>
+                              <label htmlFor="mobile-timeline" className="block text-sm font-medium text-gray-400 mb-2">
+                                {t.contact.form.timeline}
+                              </label>
+                              <CustomSelect
+                                id="mobile-timeline"
+                                name="timeline"
+                                value={formData.timeline}
+                                onChange={handleChange}
+                                placeholder={t.contact.form.timelinePlaceholder}
+                                options={[
+                                  { value: 'asap', label: { pl: 'Jak najszybciej', en: 'As soon as possible' } },
+                                  { value: '1-3', label: { pl: '1-3 miesiące', en: '1-3 months' } },
+                                  { value: '3-6', label: { pl: '3-6 miesięcy', en: '3-6 months' } },
+                                  { value: '6+', label: { pl: 'Powyżej 6 miesięcy', en: 'Above 6 months' } }
+                                ]}
+                                className="py-4"
+                              />
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {submitStatus === 'error' && (
+                      <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-2">
+                        <AlertCircle className="w-5 h-5" />
+                        {errorMessage}
+                      </div>
+                    )}
+
+                    {/* Sticky Submit Button */}
+                    <div className="sticky bottom-4 pt-4">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        type="submit"
+                        disabled={isSubmitting}
+                        className={`w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white py-4 px-6 rounded-lg font-medium text-lg
+                          ${isSubmitting ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-violet-500/25'} 
+                          transition-all duration-300 flex items-center justify-center gap-2`}
+                        style={{ minHeight: '56px' }}
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            {language === 'pl' ? 'Wysyłanie...' : 'Sending...'}
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-5 h-5" />
+                            {t.contact.form.submit}
+                          </>
+                        )}
+                      </motion.button>
+                    </div>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
           
           {/* Contact info */}
           <motion.div 
