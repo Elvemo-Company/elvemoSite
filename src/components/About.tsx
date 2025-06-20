@@ -175,33 +175,24 @@ const About: React.FC = () => {
             ))}
           </motion.div>
 
-          {/* Mission Section */}
+          {/* Mission & Quote Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="bg-black/20 backdrop-blur-sm rounded-2xl p-6 border border-gray-800/30 mb-8"
+            className="bg-black/20 backdrop-blur-sm rounded-2xl p-6 border border-violet-500/20"
           >
             <h3 className="text-xl font-bold text-white mb-4">
               {t.about.mission.title}
             </h3>
-            <p className="text-gray-300 mb-3 text-sm">
+            <p className="text-gray-300 mb-3 text-sm hidden">
               {t.about.mission.description1}
             </p>
-            <p className="text-gray-300 text-sm">
+            <p className="text-gray-300 text-sm hidden">
               {t.about.mission.description2}
             </p>
-          </motion.div>
-
-          {/* Quote Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-            className="bg-black/20 backdrop-blur-sm rounded-2xl p-6 border border-violet-500/10"
-          >
+            <div className="border-t border-gray-700/50 my-4"></div>
             <blockquote className="text-lg italic text-gray-200 font-light">
               "{t.about.quote}"
               <footer className="mt-3 text-sm text-gray-400 not-italic">

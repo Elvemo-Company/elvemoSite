@@ -36,6 +36,19 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
     if (href.startsWith('/#')) {
@@ -66,94 +79,132 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-black/80 backdrop-blur-lg py-4 shadow-lg'
-        : 'bg-black py-6'
-    }`}>
-      <div className="max-w-7xl mx-auto px-6 md:px-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-xl mr-3">
-            V
-          </div>
-          <span className="text-white text-xl font-bold">elvemo</span>
-        </Link>
-
-        {/* Desktop navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link, index) => (
-            <button
-              key={index}
-              onClick={() => handleNavClick(link.href)}
-              className="text-gray-300 hover:text-white transition-colors duration-300"
-            >
-              {link.name}
-            </button>
-          ))}
-        </nav>
-
-        {/* Language toggle and CTA button */}
-        <div className="hidden md:flex items-center space-x-6">
-          <button
-            onClick={toggleLanguage}
-            className="flex items-center text-gray-400 hover:text-white transition-colors duration-300"
-          >
-            {language === 'en' ? 'PL' : 'EN'}
-          </button>
-          
-          <button 
-            onClick={handleCTAClick}
-            className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
-          >
-            {t.nav.cta}
-          </button>
-        </div>
-
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden text-white"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      <div className={`md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-lg transition-all duration-300 overflow-hidden ${
-        isMenuOpen ? 'max-h-screen py-6' : 'max-h-0'
+    <>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-black/80 backdrop-blur-lg py-4 shadow-lg'
+          : 'bg-black py-6'
       }`}>
-        <div className="px-6 space-y-6">
-          <nav className="flex flex-col space-y-4">
+        <div className="max-w-7xl mx-auto px-6 md:px-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-xl mr-3">
+              V
+            </div>
+            <span className="text-white text-xl font-bold">elvemo</span>
+          </Link>
+
+          {/* Desktop navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link, index) => (
               <button
                 key={index}
                 onClick={() => handleNavClick(link.href)}
-                className="text-gray-300 hover:text-white transition-colors duration-300 py-2 text-left"
+                className="text-gray-300 hover:text-white transition-colors duration-300"
               >
                 {link.name}
               </button>
             ))}
           </nav>
-          
-          <div className="flex items-center justify-between pt-4 border-t border-gray-800">
+
+          {/* Language toggle and CTA button */}
+          <div className="hidden md:flex items-center space-x-6">
             <button
               onClick={toggleLanguage}
-              className="text-gray-400 hover:text-white transition-colors duration-300"
+              className="flex items-center text-gray-400 hover:text-white transition-colors duration-300"
             >
               {language === 'en' ? 'PL' : 'EN'}
             </button>
             
             <button 
               onClick={handleCTAClick}
-              className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-4 py-2 rounded-lg"
+              className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
             >
               {t.nav.cta}
             </button>
           </div>
+
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden text-white z-50 relative"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile menu overlay - only visible on mobile */}
+      <div className={`md:hidden fixed inset-0 z-40 transition-all duration-300 ease-in-out ${
+        isMenuOpen 
+          ? 'opacity-100 pointer-events-auto' 
+          : 'opacity-0 pointer-events-none'
+      }`}>
+        {/* Backdrop blur overlay */}
+        <div 
+          className="absolute inset-0 backdrop-blur-md bg-black/50"
+          onClick={() => setIsMenuOpen(false)}
+        />
+        
+        {/* Slide-in menu from right */}
+        <div className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-black/95 backdrop-blur-lg transform transition-transform duration-300 ease-in-out ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
+          <div className="flex flex-col h-full">
+            {/* Menu header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-800">
+              <div className="flex items-center">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-lg mr-3">
+                  V
+                </div>
+                <span className="text-white text-lg font-bold">elvemo</span>
+              </div>
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="text-gray-400 hover:text-white transition-colors duration-300"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Navigation links */}
+            <nav className="flex-1 px-6 py-8">
+              <div className="space-y-6">
+                {navLinks.map((link, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleNavClick(link.href)}
+                    className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-300 py-3 text-lg font-medium border-b border-gray-800/50 last:border-b-0"
+                  >
+                    {link.name}
+                  </button>
+                ))}
+              </div>
+            </nav>
+
+            {/* Bottom section with language toggle and CTA */}
+            <div className="p-6 border-t border-gray-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 text-sm">Language</span>
+                <button
+                  onClick={toggleLanguage}
+                  className="text-gray-400 hover:text-white transition-colors duration-300 px-3 py-1 border border-gray-700 rounded-lg hover:border-gray-600"
+                >
+                  {language === 'en' ? 'PL' : 'EN'}
+                </button>
+              </div>
+              
+              <button 
+                onClick={handleCTAClick}
+                className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white py-3 px-4 rounded-lg font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
+              >
+                {t.nav.cta}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </header>
+    </>
   );
 };
 
