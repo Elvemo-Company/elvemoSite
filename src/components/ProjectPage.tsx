@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, Briefcase, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Briefcase, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion } from 'framer-motion';
 import PageSpeedIndicator from './PageSpeedIndicator';
@@ -12,6 +12,8 @@ const ProjectPage: React.FC = () => {
   const { id } = useParams();
   const { language } = useLanguage();
   const project = id ? getProjectPageData(id, language as 'en' | 'pl') : null;
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -34,6 +36,36 @@ const ProjectPage: React.FC = () => {
 
   // Type assertion to ensure project is ProjectPageData
   const projectData = project as ProjectPageData;
+
+  const scrollToSlide = (index: number) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const cardWidth = container.offsetWidth * 0.85; // 85% of container width for 1.5 cards showing
+      container.scrollTo({
+        left: index * cardWidth,
+        behavior: 'smooth'
+      });
+      setCurrentSlide(index);
+    }
+  };
+
+  const nextSlide = () => {
+    if (currentSlide < projectData.gallery.length - 1) {
+      scrollToSlide(currentSlide + 1);
+    } else {
+      // Loop to first slide
+      scrollToSlide(0);
+    }
+  };
+
+  const prevSlide = () => {
+    if (currentSlide > 0) {
+      scrollToSlide(currentSlide - 1);
+    } else {
+      // Loop to last slide
+      scrollToSlide(projectData.gallery.length - 1);
+    }
+  };
 
   return (
     <motion.div
@@ -312,7 +344,9 @@ const ProjectPage: React.FC = () => {
           <h3 className="text-2xl font-bold mb-8 bg-gradient-to-r from-white via-violet-200 to-gray-300 text-transparent bg-clip-text">
             {language === 'en' ? 'Project Gallery' : 'Galeria Projektu'}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Desktop Grid Layout */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6">
             {projectData.gallery.map((image: string, index: number) => (
               <motion.div 
                 key={index}
@@ -330,6 +364,69 @@ const ProjectPage: React.FC = () => {
                 />
               </motion.div>
             ))}
+          </div>
+
+          {/* Mobile Carousel Layout */}
+          <div className="md:hidden relative">
+            {/* Navigation Buttons */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-gray-800/80 transition-all duration-300"
+              style={{ minHeight: '44px', minWidth: '44px' }}
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            
+            <button
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-gray-800/80 transition-all duration-300"
+              style={{ minHeight: '44px', minWidth: '44px' }}
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            {/* Scrollable Container */}
+            <div
+              ref={scrollContainerRef}
+              className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {projectData.gallery.map((image: string, index: number) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 w-[85%] snap-center"
+                  style={{ minWidth: '85%' }}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="rounded-2xl overflow-hidden shadow-2xl shadow-violet-900/20 border border-violet-500/10"
+                  >
+                    <img
+                      src={image}
+                      alt={`${projectData.title} - Image ${index + 1}`}
+                      className="w-full h-48 object-cover"
+                    />
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+
+            {/* Scroll Indicators */}
+            <div className="flex justify-center items-center gap-2 mt-4">
+              {projectData.gallery.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollToSlide(index)}
+                  className={`transition-all duration-300 rounded-full ${
+                    index === currentSlide
+                      ? 'w-5 h-2 bg-violet-400'
+                      : 'w-2 h-2 bg-gray-600 hover:bg-gray-500'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>

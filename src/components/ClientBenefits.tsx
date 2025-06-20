@@ -94,7 +94,7 @@ const ClientBenefits: React.FC<ClientBenefitsProps> = ({ title, subtitle, benefi
         </motion.p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {benefits.map((benefit, index) => {
           // Try both PascalCase and kebab-case versions of the icon name
           const iconName = benefit.icon;
@@ -117,20 +117,20 @@ const ClientBenefits: React.FC<ClientBenefitsProps> = ({ title, subtitle, benefi
               whileHover={{ scale: 1.02 }}
               className="relative group"
             >
-              <div className="bg-gradient-to-br from-gray-900/80 via-gray-900/90 to-violet-900/20 rounded-2xl p-6 border border-violet-500/10 shadow-2xl shadow-violet-900/20 backdrop-blur-2xl h-full transition-all duration-300 group-hover:shadow-violet-900/30">
+              <div className="bg-gradient-to-br from-gray-900/80 via-gray-900/90 to-violet-900/20 rounded-2xl p-4 md:p-6 border border-violet-500/10 shadow-2xl shadow-violet-900/20 backdrop-blur-2xl h-full transition-all duration-300 group-hover:shadow-violet-900/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
-                <div className="relative flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-violet-600/20 flex items-center justify-center text-violet-400 border border-violet-500/10 shadow-lg shadow-violet-900/20">
-                    <IconComponent className="w-6 h-6" />
+                <div className="relative flex flex-col items-center text-center gap-3 md:flex-row md:items-start md:text-left md:gap-4">
+                  <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-xl bg-violet-600/20 flex items-center justify-center text-violet-400 border border-violet-500/10 shadow-lg shadow-violet-900/20">
+                    <IconComponent className="w-5 h-5 md:w-6 md:h-6" />
                   </div>
                   
                   <div className="flex-grow">
-                    <h4 className="text-lg font-semibold text-white mb-2">
+                    <h4 className="text-sm md:text-lg font-semibold text-white mb-1 md:mb-2">
                       {benefit.title}
                     </h4>
                     
-                    <p className="text-gray-400 text-base">
+                    <p className="text-gray-400 text-xs md:text-base hidden md:block">
                       {benefit.description}
                     </p>
                   </div>
