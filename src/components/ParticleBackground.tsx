@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import useIsMobile from '../hooks/useIsMobile';
 
 interface ParticleBackgroundProps {
   density?: 'high' | 'medium' | 'low';
@@ -11,8 +12,20 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cursorRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const isMobile = useIsMobile();
 
   useEffect(() => {
+    if (isMobile) {
+      // On mobile, don't run the particle animation at all to save resources.
+      // We can also clear the canvas in case it was rendered before resizing.
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -184,7 +197,11 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
       window.removeEventListener('resize', setCanvasDimensions);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [density, fadeDirection]);
+  }, [density, fadeDirection, isMobile]);
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <canvas 
