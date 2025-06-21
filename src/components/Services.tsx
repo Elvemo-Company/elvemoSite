@@ -127,32 +127,48 @@ const Services: React.FC = () => {
               </button>
 
               {/* Accordion Content */}
-              <AnimatePresence>
+              <AnimatePresence initial={false}>
                 {expandedService === index && (
                   <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    key="content"
+                    initial="collapsed"
+                    animate="open"
+                    exit="collapsed"
+                    variants={{
+                      open: { opacity: 1, height: 'auto', y: 0 },
+                      collapsed: { opacity: 0, height: 0, y: -10 }
+                    }}
+                    transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                     className="overflow-hidden"
                   >
                     <div className="px-6 pb-6">
                       <p className="text-gray-400 mb-6">{service.description}</p>
                       
-                      <ul className="space-y-3">
+                      <motion.ul 
+                        className="space-y-3"
+                        variants={{
+                          open: { 
+                            transition: { staggerChildren: 0.07, delayChildren: 0.2 }
+                          },
+                          collapsed: {
+                            transition: { staggerChildren: 0.05, staggerDirection: -1 }
+                          }
+                        }}
+                      >
                         {service.features.map((feature, idx) => (
                           <motion.li
                             key={idx}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3, delay: idx * 0.1 }}
+                            variants={{
+                              open: { y: 0, opacity: 1 },
+                              collapsed: { y: -10, opacity: 0 }
+                            }}
                             className="flex items-start"
                           >
                             <span className="mr-3 mt-1 w-1.5 h-1.5 rounded-full bg-violet-500"></span>
                             <span className="text-gray-300">{feature}</span>
                           </motion.li>
                         ))}
-                      </ul>
+                      </motion.ul>
                     </div>
                   </motion.div>
                 )}

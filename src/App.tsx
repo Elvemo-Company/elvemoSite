@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import About from './components/About';
-import Portfolio from './components/Portfolio';
-import PortfolioAll from './components/PortfolioAll';
-import Services from './components/Services';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import ProjectPage from './components/ProjectPage';
-import LegalDocuments from './components/LegalDocuments';
-import UserSitemap from './components/UserSitemap';
 import ParticleBackground from './components/ParticleBackground';
+
+// Lazy loading components
+const Hero = React.lazy(() => import('./components/Hero'));
+const About = React.lazy(() => import('./components/About'));
+const Portfolio = React.lazy(() => import('./components/Portfolio'));
+const PortfolioAll = React.lazy(() => import('./components/PortfolioAll'));
+const Services = React.lazy(() => import('./components/Services'));
+const Contact = React.lazy(() => import('./components/Contact'));
+const ProjectPage = React.lazy(() => import('./components/ProjectPage'));
+const LegalDocuments = React.lazy(() => import('./components/LegalDocuments'));
+const UserSitemap = React.lazy(() => import('./components/UserSitemap'));
 
 // Osobny komponent do obsługi hasha
 const HashHandler: React.FC = () => {
@@ -33,6 +35,12 @@ const HashHandler: React.FC = () => {
   return null;
 };
 
+const LoadingSpinner: React.FC = () => (
+  <div className="flex justify-center items-center h-screen">
+    <div className="w-16 h-16 border-4 border-violet-400 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
+
 // Główny komponent aplikacji
 const AppContent: React.FC = () => {
   const { language } = useLanguage();
@@ -51,23 +59,25 @@ const AppContent: React.FC = () => {
       <div className="relative z-10">
         <HashHandler />
         <Navbar />
-        <Routes>
-          <Route path="/" element={
-            <main>
-              <section id="hero">
-                <Hero />
-              </section>
-              <About />
-              <Portfolio />
-              <Services />
-              <Contact />
-            </main>
-          } />
-          <Route path="/portfolio" element={<PortfolioAll />} />
-          <Route path="/portfolio/:id" element={<ProjectPage />} />
-          <Route path="/legal" element={<LegalDocuments />} />
-          <Route path="/sitemap" element={<UserSitemap />} />
-        </Routes>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={
+              <main>
+                <section id="hero">
+                  <Hero />
+                </section>
+                <About />
+                <Portfolio />
+                <Services />
+                <Contact />
+              </main>
+            } />
+            <Route path="/portfolio" element={<PortfolioAll />} />
+            <Route path="/portfolio/:id" element={<ProjectPage />} />
+            <Route path="/legal" element={<LegalDocuments />} />
+            <Route path="/sitemap" element={<UserSitemap />} />
+          </Routes>
+        </Suspense>
         <Footer />
       </div>
     </div>

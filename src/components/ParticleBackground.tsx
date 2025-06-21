@@ -41,9 +41,9 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
     // Determine particle count based on density
     const getParticleCount = () => {
       let baseCount = Math.min(180, Math.floor((canvas.width * canvas.height) / 8000));
-      // Zmniejsz ilość cząsteczek na mobile
+      // Drastycznie zmniejsz ilość cząsteczek na mobile
       if (window.innerWidth < 768) {
-        baseCount = Math.floor(baseCount / 1.7);
+        baseCount = Math.min(100, Math.floor((canvas.width * canvas.height) / 15000));
       }
       switch(density) {
         case 'high': return baseCount * 1.5;
