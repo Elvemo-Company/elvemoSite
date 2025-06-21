@@ -13,6 +13,9 @@ const Portfolio: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [currentSlide, setCurrentSlide] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const filters = ['all', ...new Set(projects.map(project => project.category))];
   
   const filteredProjects = activeFilter === 'all' 
@@ -23,6 +26,25 @@ const Portfolio: React.FC = () => {
   useEffect(() => {
     setCurrentSlide(0);
   }, [activeFilter]);
+
+  // Update current slide based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current && !isDragging) {
+        const container = scrollContainerRef.current;
+        const cardWidth = container.offsetWidth * 0.85;
+        const scrollPosition = container.scrollLeft;
+        const newSlide = Math.round(scrollPosition / cardWidth);
+        setCurrentSlide(newSlide);
+      }
+    };
+
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, [isDragging]);
 
   const scrollToSlide = (index: number) => {
     if (scrollContainerRef.current) {
@@ -51,6 +73,35 @@ const Portfolio: React.FC = () => {
     } else {
       // Loop to last slide
       scrollToSlide(filteredProjects.length - 1);
+    }
+  };
+
+  // Touch/Swipe handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0));
+    setScrollLeft(scrollContainerRef.current?.scrollLeft || 0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 2;
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    // Snap to nearest slide
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const cardWidth = container.offsetWidth * 0.85;
+      const scrollPosition = container.scrollLeft;
+      const targetSlide = Math.round(scrollPosition / cardWidth);
+      scrollToSlide(Math.max(0, Math.min(targetSlide, filteredProjects.length - 1)));
     }
   };
 
@@ -171,6 +222,9 @@ const Portfolio: React.FC = () => {
             ref={scrollContainerRef}
             className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {filteredProjects.map((project, index) => (
               <div

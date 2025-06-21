@@ -29,32 +29,32 @@ const About: React.FC = () => {
   // Mobile visual storytelling icons
   const mobileFeatures = [
     {
-      icon: <Clock className="w-6 h-6 text-violet-400" />,
+      icon: <Clock className="w-9 h-9 text-violet-400" />,
       title: language === 'pl' ? 'Szybkość' : 'Speed',
       description: language === 'pl' ? 'Gotowe w kilka dni' : 'Ready in days'
     },
     {
-      icon: <Users className="w-6 h-6 text-violet-400" />,
+      icon: <Users className="w-9 h-9 text-violet-400" />,
       title: language === 'pl' ? 'Współpraca' : 'Collaboration',
       description: language === 'pl' ? 'Zespół na którym możesz polegać' : 'Team you can count on'
     },
     {
-      icon: <Target className="w-6 h-6 text-violet-400" />,
+      icon: <Target className="w-9 h-9 text-violet-400" />,
       title: language === 'pl' ? 'Cel' : 'Goals',
       description: language === 'pl' ? 'Skuteczne rozwiązania' : 'Effective solutions'
     },
     {
-      icon: <Zap className="w-6 h-6 text-violet-400" />,
+      icon: <Zap className="w-9 h-9 text-violet-400" />,
       title: language === 'pl' ? 'Wydajność' : 'Performance',
       description: language === 'pl' ? 'Optymalizacja i szybkość' : 'Optimized & fast'
     },
     {
-      icon: <Heart className="w-6 h-6 text-violet-400" />,
+      icon: <Heart className="w-9 h-9 text-violet-400" />,
       title: language === 'pl' ? 'Pasja' : 'Passion',
       description: language === 'pl' ? 'Tworzymy z sercem' : 'We create with heart'
     },
     {
-      icon: <Shield className="w-6 h-6 text-violet-400" />,
+      icon: <Shield className="w-9 h-9 text-violet-400" />,
       title: language === 'pl' ? 'Bezpieczeństwo' : 'Security',
       description: language === 'pl' ? 'Bezpieczne i niezawodne' : 'Safe & reliable'
     }
