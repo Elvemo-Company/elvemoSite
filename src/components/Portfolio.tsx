@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useAnimation, PanInfo } from 'framer-motion';
 import { getPortfolioProjects } from '../data/projects';
 import { translations } from '../utils/translations';
 
@@ -12,96 +12,69 @@ const Portfolio: React.FC = () => {
   const projects = getPortfolioProjects(language as 'en' | 'pl');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [currentSlide, setCurrentSlide] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const controls = useAnimation();
+  const x = useMotionValue(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [cardWidth, setCardWidth] = useState(0);
+
   const filters = ['all', ...new Set(projects.map(project => project.category))];
   
   const filteredProjects = activeFilter === 'all' 
     ? projects 
     : projects.filter(project => project.category === activeFilter);
 
-  // Reset current slide when filter changes
   useEffect(() => {
-    setCurrentSlide(0);
-  }, [activeFilter]);
-
-  // Update current slide based on scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollContainerRef.current && !isDragging) {
-        const container = scrollContainerRef.current;
-        const cardWidth = container.offsetWidth * 0.85;
-        const scrollPosition = container.scrollLeft;
-        const newSlide = Math.round(scrollPosition / cardWidth);
-        setCurrentSlide(newSlide);
+    const calcCardWidth = () => {
+      if (containerRef.current) {
+        // Card width is 85% of container width + gap (which is part of the 15% left)
+        const containerWidth = containerRef.current.offsetWidth;
+        setCardWidth(containerWidth * 0.85 + (containerWidth * 0.15 * 0.2)); // Approximation of card + gap
       }
     };
+    calcCardWidth();
+    window.addEventListener('resize', calcCardWidth);
+    return () => window.removeEventListener('resize', calcCardWidth);
+  }, []);
 
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, [isDragging]);
+  useEffect(() => {
+    // Reset slide and position when filters change
+    setCurrentSlide(0);
+    controls.set({ x: 0 });
+    x.set(0);
+  }, [activeFilter, controls, x]);
 
   const scrollToSlide = (index: number) => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const cardWidth = container.offsetWidth * 0.85; // 85% of container width for 1.5 cards showing
-      container.scrollTo({
-        left: index * cardWidth,
-        behavior: 'smooth'
-      });
-      setCurrentSlide(index);
-    }
+    setCurrentSlide(index);
+    controls.start({
+      x: -index * cardWidth,
+      transition: { type: 'spring', stiffness: 300, damping: 30 }
+    });
   };
 
   const nextSlide = () => {
-    if (currentSlide < filteredProjects.length - 1) {
-      scrollToSlide(currentSlide + 1);
-    } else {
-      // Loop to first slide
-      scrollToSlide(0);
-    }
+    const nextIndex = (currentSlide + 1) % filteredProjects.length;
+    scrollToSlide(nextIndex);
   };
 
   const prevSlide = () => {
-    if (currentSlide > 0) {
-      scrollToSlide(currentSlide - 1);
+    const prevIndex = (currentSlide - 1 + filteredProjects.length) % filteredProjects.length;
+    scrollToSlide(prevIndex);
+  };
+
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    const { offset, velocity } = info;
+    const swipeThreshold = 50;
+
+    if (Math.abs(velocity.x) > swipeThreshold) {
+      if (velocity.x > 0) {
+        prevSlide();
+      } else {
+        nextSlide();
+      }
     } else {
-      // Loop to last slide
-      scrollToSlide(filteredProjects.length - 1);
-    }
-  };
-
-  // Touch/Swipe handlers for mobile
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    setStartX(e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0));
-    setScrollLeft(scrollContainerRef.current?.scrollLeft || 0);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.touches[0].pageX - (scrollContainerRef.current?.offsetLeft || 0);
-    const walk = (x - startX) * 2;
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft = scrollLeft - walk;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    // Snap to nearest slide
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const cardWidth = container.offsetWidth * 0.85;
-      const scrollPosition = container.scrollLeft;
-      const targetSlide = Math.round(scrollPosition / cardWidth);
-      scrollToSlide(Math.max(0, Math.min(targetSlide, filteredProjects.length - 1)));
+      // Snap to the nearest slide based on offset
+      const targetSlide = Math.round(-x.get() / cardWidth);
+      scrollToSlide(targetSlide);
     }
   };
 
@@ -111,7 +84,7 @@ const Portfolio: React.FC = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       id="portfolio"
-      className="py-16 md:py-24 bg-violet-950/80 backdrop-blur-sm relative overflow-hidden"
+      className="py-16 md:py-24 bg-violet-600/10 backdrop-blur-lg relative overflow-hidden border-t border-b border-violet-500/30"
     >
       {/* Gradient accent */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-violet-600 to-transparent opacity-30"></div>
@@ -199,7 +172,7 @@ const Portfolio: React.FC = () => {
         </div>
 
         {/* Mobile Carousel Layout */}
-        <div className="md:hidden relative">
+        <div ref={containerRef} className="md:hidden relative overflow-hidden">
           {/* Navigation Buttons */}
           <button
             onClick={prevSlide}
@@ -217,14 +190,18 @@ const Portfolio: React.FC = () => {
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Scrollable Container */}
-          <div
-            ref={scrollContainerRef}
-            className="flex gap-3 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+          {/* Draggable Container */}
+          <motion.div
+            className="flex gap-3"
+            drag="x"
+            dragConstraints={{ 
+              right: 0, 
+              left: -cardWidth * (filteredProjects.length - 1)
+            }}
+            animate={controls}
+            style={{ x }}
+            onDragEnd={handleDragEnd}
+            dragElastic={0.1}
           >
             {filteredProjects.map((project, index) => (
               <div
@@ -268,7 +245,7 @@ const Portfolio: React.FC = () => {
                 </motion.div>
               </div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Scroll Indicators */}
           <div className="flex justify-center items-center gap-2 mt-4">
