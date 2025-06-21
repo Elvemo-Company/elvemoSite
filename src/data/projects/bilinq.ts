@@ -1,5 +1,6 @@
 import { Project, createPageSpeedScores } from './types';
-import mainPageImage from '../../assets/projects/bilinq/main-page.png';
+import coverImage from '../../assets/projects/bilinq/main-page.webp';
+import mainPageImage from '../../assets/projects/bilinq/main-page.webp';
 
 
 export const bilinq: Project = {

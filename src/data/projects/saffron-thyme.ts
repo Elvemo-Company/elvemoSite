@@ -1,6 +1,6 @@
 import { Project, createPageSpeedScores } from "./types";
-import coverImage from '../../assets/projects/saffron-thyme/saffron-thyme-cover.jpeg';
-import mainPageImage from '../../assets/projects/saffron-thyme/main-page.png';
+import coverImage from '../../assets/projects/saffron-thyme/saffron-thyme-cover.webp';
+import mainPageImage from '../../assets/projects/saffron-thyme/main-page.webp';
 
 export const saffronThyme: Project = {
     id: 'saffron-thyme',

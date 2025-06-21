@@ -1,6 +1,6 @@
 import { Project, createPageSpeedScores } from './types';
-import mainPageImage from '../../assets/projects/safetripvax/main-page.png';
-import cover from '../../assets/projects/safetripvax/cover.png';
+import mainPageImage from '../../assets/projects/safetripvax/main-page.webp';
+import cover from '../../assets/projects/safetripvax/cover.webp';
 
 
 export const safetripvax: Project = {
