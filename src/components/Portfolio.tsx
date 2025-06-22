@@ -175,22 +175,7 @@ const Portfolio: React.FC = () => {
 
         {/* Mobile Carousel Layout */}
         <div ref={containerRef} className="md:hidden relative overflow-hidden">
-          {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-gray-800/80 transition-all duration-300"
-            style={{ minHeight: '44px', minWidth: '44px' }}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          
-          <button
-            onClick={nextSlide}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-gray-800/80 transition-all duration-300"
-            style={{ minHeight: '44px', minWidth: '44px' }}
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+         
 
           {/* Draggable Container */}
           <motion.div
@@ -211,42 +196,44 @@ const Portfolio: React.FC = () => {
                 className="flex-shrink-0 w-[85%] snap-center"
                 style={{ minWidth: '85%' }}
               >
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gray-900 transition-all duration-500"
+                <Link
+                  to={`/portfolio/${project.id}`}
+                  className="block focus:outline-none"
+                  tabIndex={0}
+                  style={{ borderRadius: '1rem', overflow: 'hidden' }}
                 >
-                  <div className="aspect-video overflow-hidden">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-90"></div>
-                  </div>
-                  
-                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 transform translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
-                    <span className="inline-block px-3 py-1 rounded-full bg-violet-600/30 text-violet-300 text-xs mb-3">
-                      {project.category}
-                    </span>
-                    <h3 className="text-lg md:text-xl font-bold text-white mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-300 mb-4 text-sm hidden md:block">
-                      {project.description}
-                    </p>
-                    <Link
-                      to={`/portfolio/${project.id}`}
-                      className="inline-flex items-center text-violet-400 hover:text-violet-300 transition-colors"
-                      style={{ minHeight: '44px', minWidth: '44px' }}
-                    >
-                      {t.viewProject} <ExternalLink className="ml-1 w-4 h-4" />
-                    </Link>
-                  </div>
-                </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="group relative overflow-hidden rounded-2xl bg-gray-900 transition-all duration-500"
+                  >
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-70 transition-opacity duration-300 group-hover:opacity-90"></div>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 transform translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
+                      <span className="inline-block px-3 py-1 rounded-full bg-violet-600/30 text-violet-300 text-xs mb-3">
+                        {project.category}
+                      </span>
+                      <h3 className="text-lg md:text-xl font-bold text-white mb-2">
+                        {project.title}
+                      </h3>
+                      <p className="text-gray-300 mb-4 text-sm hidden md:block">
+                        {project.description}
+                      </p>
+                      <span className="inline-flex items-center text-violet-400 hover:text-violet-300 transition-colors" style={{ minHeight: '44px', minWidth: '44px' }}>
+                        {t.viewProject} <ExternalLink className="ml-1 w-4 h-4" />
+                      </span>
+                    </div>
+                  </motion.div>
+                </Link>
               </div>
             ))}
           </motion.div>
