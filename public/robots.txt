@@ -1,14 +1,26 @@
-# Allow all crawlers
+# Main directives for all crawlers
 User-agent: *
 Allow: /
-
-# Sitemap location
-Sitemap: https://vibbly.com/sitemap.xml
-
-# Disallow crawling of admin or private areas (if any)
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
 
-# Crawl-delay for all bots
-Crawl-delay: 10 
+# Google-specific crawlers
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Sitemap location
+Sitemap: https://elvemo.netlify.app/sitemap.xml
+
+# Note: Google ignores Crawl-delay directive and uses Search Console settings instead
+# Other search engines may use this value (10 seconds is quite high - consider lowering)
+Crawl-delay: 5
