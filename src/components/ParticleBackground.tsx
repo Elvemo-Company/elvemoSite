@@ -15,16 +15,7 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (isMobile) {
-      // On mobile, don't run the particle animation at all to save resources.
-      // We can also clear the canvas in case it was rendered before resizing.
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        ctx?.clearRect(0, 0, canvas.width, canvas.height);
-      }
-      return;
-    }
+    // Particles now work on mobile too with reduced count for performance
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -199,9 +190,7 @@ const ParticleBackground: React.FC<ParticleBackgroundProps> = ({
     };
   }, [density, fadeDirection, isMobile]);
 
-  if (isMobile) {
-    return null;
-  }
+  // Removed mobile check - canvas will render on all devices
 
   return (
     <canvas 
