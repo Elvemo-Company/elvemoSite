@@ -3,7 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
+// SVG logo jest w folderze public, więc używamy bezpośredniej ścieżki
 
 const Navbar: React.FC = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -90,7 +90,7 @@ const Navbar: React.FC = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <img 
-              src={logo} 
+              src="/logo.svg" 
               alt="elvemo logo" 
               className="w-10 h-10 rounded-lg mr-3 object-contain"
             />
@@ -158,7 +158,7 @@ const Navbar: React.FC = () => {
             <div className="flex items-center justify-between p-6 border-b border-gray-800">
               <div className="flex items-center">
                 <img 
-                  src={logo} 
+                  src="/logo.svg" 
                   alt="elvemo logo" 
                   className="w-8 h-8 rounded-lg mr-3 object-contain"
                 />

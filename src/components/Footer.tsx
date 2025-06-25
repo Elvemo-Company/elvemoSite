@@ -4,7 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import { ChevronRight } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import logo from '../assets/logo.png';
+// SVG logo jest w folderze public, więc używamy bezpośredniej ścieżki
 
 const Footer: React.FC = () => {
   const { language } = useLanguage();
@@ -63,7 +63,7 @@ const Footer: React.FC = () => {
           <div className="md:col-span-2">
             <div className="flex items-center mb-4 md:mb-6">
               <img 
-                src={logo} 
+                src="/logo.svg" 
                 alt="elvemo logo" 
                 className="w-8 h-8 md:w-10 md:h-10 rounded-lg mr-3 object-contain"
               />
