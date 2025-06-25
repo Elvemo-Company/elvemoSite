@@ -4,6 +4,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import { ChevronRight } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 const Footer: React.FC = () => {
   const { language } = useLanguage();
@@ -61,9 +62,11 @@ const Footer: React.FC = () => {
           {/* Logo and description */}
           <div className="md:col-span-2">
             <div className="flex items-center mb-4 md:mb-6">
-              <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-lg md:text-xl mr-3">
-                E
-              </div>
+              <img 
+                src={logo} 
+                alt="elvemo logo" 
+                className="w-8 h-8 md:w-10 md:h-10 rounded-lg mr-3 object-contain"
+              />
               <span className="text-white text-lg md:text-xl font-bold">elvemo</span>
             </div>
             <p className="text-gray-400 mb-4 md:mb-6 max-w-md text-sm md:text-base">

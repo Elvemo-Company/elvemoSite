@@ -3,6 +3,7 @@ import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../utils/translations';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 const Navbar: React.FC = () => {
   const { language, toggleLanguage } = useLanguage();
@@ -88,9 +89,11 @@ const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-16 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-xl mr-3">
-              V
-            </div>
+            <img 
+              src={logo} 
+              alt="elvemo logo" 
+              className="w-10 h-10 rounded-lg mr-3 object-contain"
+            />
             <span className="text-white text-xl font-bold">elvemo</span>
           </Link>
 
@@ -154,9 +157,11 @@ const Navbar: React.FC = () => {
             {/* Menu header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-800">
               <div className="flex items-center">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-600 flex items-center justify-center text-white font-bold text-lg mr-3">
-                  V
-                </div>
+                <img 
+                  src={logo} 
+                  alt="elvemo logo" 
+                  className="w-8 h-8 rounded-lg mr-3 object-contain"
+                />
                 <span className="text-white text-lg font-bold">elvemo</span>
               </div>
               <button
