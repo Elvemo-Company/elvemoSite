@@ -254,7 +254,7 @@ const Portfolio: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-8 md:mt-12 flex justify-center">
+        {/* <div className="mt-8 md:mt-12 flex justify-center">
           <Link
             to="/portfolio"
             className="group relative inline-flex items-center justify-center px-6 md:px-8 py-3 md:py-4 font-bold text-white transition-all duration-300 ease-out bg-gradient-to-r from-violet-600 to-violet-800 rounded-2xl shadow-lg hover:shadow-violet-500/25 hover:scale-105"
@@ -265,7 +265,7 @@ const Portfolio: React.FC = () => {
               {language === 'pl' ? 'Zobacz wszystkie projekty' : 'See all projects'}
             </span>
           </Link>
-        </div>
+        </div> */}
       </div>
     </motion.section>
   );

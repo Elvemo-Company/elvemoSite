@@ -185,7 +185,7 @@ const Contact: React.FC = () => {
   };
 
   const handleCopyNumber = () => {
-    navigator.clipboard.writeText('+48123456789');
+    navigator.clipboard.writeText('+48692800744');
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
@@ -521,14 +521,14 @@ const Contact: React.FC = () => {
               
               <div className="space-y-4">
                 <motion.a
-                  href="tel:+48123456789"
+                  href="tel:+48692800744"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white py-4 px-6 rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
                   style={{ minHeight: '56px' }}
                 >
                   <Phone className="w-6 h-6" />
-                  <span>+48 123 456 789</span>
+                  <span>+48 692 800 744</span>
                 </motion.a>
                 
                 <div className="flex items-center justify-center gap-4">
@@ -881,10 +881,10 @@ const Contact: React.FC = () => {
                     </p>
                     <div className="flex items-center gap-2">
                       <a 
-                        href="tel:+48123456789" 
+                        href="tel:+48692800774" 
                         className="text-lg font-semibold text-violet-400 hover:text-violet-300 transition-colors duration-300"
                       >
-                        +48 123 456 789
+                        +48 692 800 774
                       </a>
                       <motion.button
                         onClick={handleCopyNumber}
@@ -903,7 +903,7 @@ const Contact: React.FC = () => {
                   </div>
                 </div>
                 <motion.a
-                  href="tel:+48123456789"
+                  href="tel:+48692800774"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="hidden md:flex items-center gap-2 px-4 py-2 bg-violet-600/30 hover:bg-violet-600/40 rounded-lg text-violet-400 transition-colors duration-300"
@@ -940,9 +940,15 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-gray-400 text-sm mb-1">{t.contact.info.phone}</p>
-                    <a href="tel:+48123456789" className="text-violet-400 hover:text-violet-300 transition-colors duration-300">
-                      +48 123 456 789
+                    <a href="tel:+48692800774" className="text-violet-400 hover:text-violet-300 transition-colors duration-300">
+                      +48 692 800 774
                     </a>
+                    <span className="text-xs text-gray-400 ml-2">(Dawid)</span>
+                    <br />
+                    <a href="tel:+48728543870" className="text-violet-400 hover:text-violet-300 transition-colors duration-300">
+                      +48 728 543 870
+                    </a>
+                    <span className="text-xs text-gray-400 ml-2">(Igor)</span>
                   </div>
                 </div>
                 
